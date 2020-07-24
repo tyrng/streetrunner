@@ -1,0 +1,27 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag ongtypc/streetrunner:$(date +%s)
+    - name: Deploy to Heroku
+      uses: AkhileshNS/heroku-deploy@v3.3.6
+      with:
+        # This will be used for authentication. You can find it in your heroku homepage account settings
+        heroku_api_key: ee739c09-451c-4ede-908e-1004dce130c5
+        # Email that you use with heroku
+        heroku_email: ongtypc@gmail.com
+        # The appname to use for deploying/updating
+        heroku_app_name: docker-devops-3-2
